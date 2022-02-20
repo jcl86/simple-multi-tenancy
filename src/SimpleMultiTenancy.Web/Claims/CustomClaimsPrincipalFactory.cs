@@ -30,8 +30,8 @@ namespace SimpleMultiTenancy.Web.Data
         private async Task<User> ReloadUserInludingNavigationProperty(User user)
         {
             user = await UserManager.Users
-                .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
+                .Include(x => x.UserRoles).ThenInclude(x => x.Role)
+                .Include(x => x.UserRoles).ThenInclude(x => x.School)
                 .SingleAsync(x => x.Id == user.Id);
             return user;
         }

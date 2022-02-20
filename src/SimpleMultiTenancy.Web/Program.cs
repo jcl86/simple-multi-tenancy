@@ -11,7 +11,6 @@ builder.Services.AddCustomAspnetIdentity(connectionString);
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddRazorPages();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,7 +34,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
-
 
 using (var scope = app.Services.CreateScope())
 {

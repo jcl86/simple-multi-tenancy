@@ -9,7 +9,7 @@ namespace SimpleMultiTenancy.Web
         public IEnumerable<ViewModels.RoleInCompany> GetCompanyRoles() => UserRoles.Select(x =>
             new ViewModels.RoleInCompany()
             {
-                Company = new ViewModels.Company()
+                Company = new ViewModels.School()
                 {
                     Id = x.School.Id,
                     Name = x.School.Name

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SimpleMultiTenancy.Web.Data;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace SimpleMultiTenancy.Web
 {
@@ -14,8 +15,8 @@ namespace SimpleMultiTenancy.Web
             services.AddIdentity<User, Role>()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-               // .AddClaimsPrincipalFactory<CustomClaimsPrincipalFactory>();
+                .AddDefaultTokenProviders()
+                .AddClaimsPrincipalFactory<CustomClaimsPrincipalFactory>();
 
             services.AddScoped<UserManager<User>>();
 

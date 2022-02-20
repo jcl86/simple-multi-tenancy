@@ -23,13 +23,13 @@ namespace SimpleMultiTenancy.Web.Data
         public async Task CreateDefaultData()
         {
             var teacher = await GetOrCreateRole(RoleNames.Teacher);
-            var student = await GetOrCreateRole(RoleNames.Teacher);
+            var student = await GetOrCreateRole(RoleNames.Student);
 
             var berkeley = await GetOrCreateSchool("Berkeley");
             var uned = await GetOrCreateSchool("UNED");
 
             await GetOrCreateUser("bob@boss.com", DefaultPassword, (berkeley.Id, student.Id), (uned.Id, teacher.Id));
-            await GetOrCreateUser("alice@boss.com", DefaultPassword, (berkeley.Id, student.Id));
+            await GetOrCreateUser("alice@berkeley.com", DefaultPassword, (berkeley.Id, student.Id));
         }
 
         private async Task<School> GetOrCreateSchool(string schoolName)
@@ -44,7 +44,7 @@ namespace SimpleMultiTenancy.Web.Data
             return school;
         }
 
-        public async Task GetOrCreateUser(string email, string password, params (string schoolId, string roleId)[] roles)
+        public async Task GetOrCreateUser(string email, string password, params (int schoolId, string roleId)[] roles)
         {
             var user = await userManager.FindByNameAsync(email);
             if (user is null)

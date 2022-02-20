@@ -319,12 +319,12 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                 oldType: "nvarchar(128)",
                 oldMaxLength: 128);
 
-            migrationBuilder.AddColumn<string>(
+            migrationBuilder.AddColumn<int>(
                 name: "SCHOOLID",
                 table: "ASPNETUSERROLES",
-                type: "nvarchar(450)",
+                type: "int",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: 0);
 
             migrationBuilder.AlterColumn<string>(
                 name: "PROVIDERKEY",
@@ -383,7 +383,8 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                 name: "SCHOOLS",
                 columns: table => new
                 {
-                    ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     NAME = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>

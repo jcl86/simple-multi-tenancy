@@ -162,9 +162,12 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
 
             modelBuilder.Entity("SimpleMultiTenancy.Web.School", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -267,8 +270,8 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("ROLEID");
 
-                    b.Property<string>("SchoolId")
-                        .HasColumnType("nvarchar(450)")
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("int")
                         .HasColumnName("SCHOOLID");
 
                     b.HasKey("UserId", "RoleId", "SchoolId");
