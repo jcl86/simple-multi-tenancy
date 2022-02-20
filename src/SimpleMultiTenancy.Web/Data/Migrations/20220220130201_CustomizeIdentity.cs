@@ -4,7 +4,7 @@
 
 namespace SimpleMultiTenancy.Web.Data.Migrations
 {
-    public partial class AddIdentity : Migration
+    public partial class CustomizeIdentity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -301,12 +301,48 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                 table: "ASPNETROLECLAIMS",
                 newName: "IX_ASPNETROLECLAIMS_ROLEID");
 
+            migrationBuilder.AlterColumn<string>(
+                name: "NAME",
+                table: "ASPNETUSERTOKENS",
+                type: "nvarchar(450)",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(128)",
+                oldMaxLength: 128);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "LOGINPROVIDER",
+                table: "ASPNETUSERTOKENS",
+                type: "nvarchar(450)",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(128)",
+                oldMaxLength: 128);
+
             migrationBuilder.AddColumn<string>(
-                name: "COMPANYID",
+                name: "SCHOOLID",
                 table: "ASPNETUSERROLES",
                 type: "nvarchar(450)",
                 nullable: false,
                 defaultValue: "");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "PROVIDERKEY",
+                table: "ASPNETUSERLOGINS",
+                type: "nvarchar(450)",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(128)",
+                oldMaxLength: 128);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "LOGINPROVIDER",
+                table: "ASPNETUSERLOGINS",
+                type: "nvarchar(450)",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(128)",
+                oldMaxLength: 128);
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_ASPNETUSERTOKENS",
@@ -321,7 +357,7 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
             migrationBuilder.AddPrimaryKey(
                 name: "PK_ASPNETUSERROLES",
                 table: "ASPNETUSERROLES",
-                columns: new[] { "USERID", "ROLEID", "COMPANYID" });
+                columns: new[] { "USERID", "ROLEID", "SCHOOLID" });
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_ASPNETUSERLOGINS",
@@ -344,7 +380,7 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                 column: "ID");
 
             migrationBuilder.CreateTable(
-                name: "COMPANIES",
+                name: "SCHOOLS",
                 columns: table => new
                 {
                     ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -352,7 +388,7 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_COMPANIES", x => x.ID);
+                    table.PrimaryKey("PK_SCHOOLS", x => x.ID);
                 });
 
             migrationBuilder.CreateIndex(
@@ -363,9 +399,9 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                 filter: "[NORMALIZEDUSERNAME] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ASPNETUSERROLES_COMPANYID",
+                name: "IX_ASPNETUSERROLES_SCHOOLID",
                 table: "ASPNETUSERROLES",
-                column: "COMPANYID");
+                column: "SCHOOLID");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -415,10 +451,10 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ASPNETUSERROLES_COMPANIES_COMPANYID",
+                name: "FK_ASPNETUSERROLES_SCHOOLS_SCHOOLID",
                 table: "ASPNETUSERROLES",
-                column: "COMPANYID",
-                principalTable: "COMPANIES",
+                column: "SCHOOLID",
+                principalTable: "SCHOOLS",
                 principalColumn: "ID",
                 onDelete: ReferentialAction.Cascade);
 
@@ -454,7 +490,7 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                 table: "ASPNETUSERROLES");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_ASPNETUSERROLES_COMPANIES_COMPANYID",
+                name: "FK_ASPNETUSERROLES_SCHOOLS_SCHOOLID",
                 table: "ASPNETUSERROLES");
 
             migrationBuilder.DropForeignKey(
@@ -462,7 +498,7 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                 table: "ASPNETUSERTOKENS");
 
             migrationBuilder.DropTable(
-                name: "COMPANIES");
+                name: "SCHOOLS");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_ASPNETUSERTOKENS",
@@ -481,7 +517,7 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                 table: "ASPNETUSERROLES");
 
             migrationBuilder.DropIndex(
-                name: "IX_ASPNETUSERROLES_COMPANYID",
+                name: "IX_ASPNETUSERROLES_SCHOOLID",
                 table: "ASPNETUSERROLES");
 
             migrationBuilder.DropPrimaryKey(
@@ -505,7 +541,7 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                 table: "ASPNETROLECLAIMS");
 
             migrationBuilder.DropColumn(
-                name: "COMPANYID",
+                name: "SCHOOLID",
                 table: "ASPNETUSERROLES");
 
             migrationBuilder.RenameTable(
@@ -740,6 +776,42 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                 name: "IX_ASPNETROLECLAIMS_ROLEID",
                 table: "AspNetRoleClaims",
                 newName: "IX_AspNetRoleClaims_RoleId");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Name",
+                table: "AspNetUserTokens",
+                type: "nvarchar(128)",
+                maxLength: 128,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(450)");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "LoginProvider",
+                table: "AspNetUserTokens",
+                type: "nvarchar(128)",
+                maxLength: 128,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(450)");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "ProviderKey",
+                table: "AspNetUserLogins",
+                type: "nvarchar(128)",
+                maxLength: 128,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(450)");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "LoginProvider",
+                table: "AspNetUserLogins",
+                type: "nvarchar(128)",
+                maxLength: 128,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(450)");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_AspNetUserTokens",

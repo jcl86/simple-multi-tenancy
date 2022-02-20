@@ -36,4 +36,23 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        var userManager = services.GetRequiredService<UserManager<User>>();
+        var roleManager = services.GetRequiredService<RoleManager<Role>>();
+
+        await new DatabaseInitializer(context, userManager, roleManager).CreateDefaultData();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, $"An error occurred initializeing the DB. {ex.Message}");
+    }
+}
+
 app.Run();

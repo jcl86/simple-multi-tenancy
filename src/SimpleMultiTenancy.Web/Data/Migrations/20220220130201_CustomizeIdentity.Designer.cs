@@ -12,8 +12,8 @@ using SimpleMultiTenancy.Web.Data;
 namespace SimpleMultiTenancy.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220220013044_CreateSampleData")]
-    partial class CreateSampleData
+    [Migration("20220220130201_CustomizeIdentity")]
+    partial class CustomizeIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -85,13 +85,11 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("LOGINPROVIDER");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("PROVIDERKEY");
 
                     b.Property<string>("ProviderDisplayName")
@@ -117,13 +115,11 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                         .HasColumnName("USERID");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("LOGINPROVIDER");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("NAME");
 
                     b.Property<string>("Value")
@@ -133,23 +129,6 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("ASPNETUSERTOKENS", (string)null);
-                });
-
-            modelBuilder.Entity("SimpleMultiTenancy.Web.Company", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("ID");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("NAME");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("COMPANIES");
                 });
 
             modelBuilder.Entity("SimpleMultiTenancy.Web.Role", b =>
@@ -181,6 +160,23 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                         .HasFilter("[NORMALIZEDNAME] IS NOT NULL");
 
                     b.ToTable("ASPNETROLES", (string)null);
+                });
+
+            modelBuilder.Entity("SimpleMultiTenancy.Web.School", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("ID");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("NAME");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SCHOOLS");
                 });
 
             modelBuilder.Entity("SimpleMultiTenancy.Web.User", b =>
@@ -273,15 +269,15 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("ROLEID");
 
-                    b.Property<string>("CompanyId")
+                    b.Property<string>("SchoolId")
                         .HasColumnType("nvarchar(450)")
-                        .HasColumnName("COMPANYID");
+                        .HasColumnName("SCHOOLID");
 
-                    b.HasKey("UserId", "RoleId", "CompanyId");
-
-                    b.HasIndex("CompanyId");
+                    b.HasKey("UserId", "RoleId", "SchoolId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("SchoolId");
 
                     b.ToTable("ASPNETUSERROLES", (string)null);
                 });
@@ -324,28 +320,42 @@ namespace SimpleMultiTenancy.Web.Data.Migrations
 
             modelBuilder.Entity("SimpleMultiTenancy.Web.UserRole", b =>
                 {
-                    b.HasOne("SimpleMultiTenancy.Web.Company", "Company")
+                    b.HasOne("SimpleMultiTenancy.Web.Role", "Role")
                         .WithMany("UserRoles")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SimpleMultiTenancy.Web.Role", null)
-                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SimpleMultiTenancy.Web.User", null)
-                        .WithMany()
+                    b.HasOne("SimpleMultiTenancy.Web.School", "School")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SimpleMultiTenancy.Web.User", "User")
+                        .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Company");
+                    b.Navigation("Role");
+
+                    b.Navigation("School");
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SimpleMultiTenancy.Web.Company", b =>
+            modelBuilder.Entity("SimpleMultiTenancy.Web.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("SimpleMultiTenancy.Web.School", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("SimpleMultiTenancy.Web.User", b =>
                 {
                     b.Navigation("UserRoles");
                 });

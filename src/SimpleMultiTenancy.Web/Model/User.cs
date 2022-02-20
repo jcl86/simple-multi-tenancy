@@ -4,8 +4,18 @@ namespace SimpleMultiTenancy.Web
 {
     public class User : IdentityUser
     {
-        //Fill for customize the user entity. If there is no need for it, just remove this class and use everywhere IdentityUser
+        public ICollection<UserRole> UserRoles { get; set; }
 
-        //public ICollection<UserRole> UserRoles { get; set; }
+        public IEnumerable<ViewModels.RoleInCompany> GetCompanyRoles() => UserRoles.Select(x =>
+            new ViewModels.RoleInCompany()
+            {
+                Company = new ViewModels.Company()
+                {
+                    Id = x.School.Id,
+                    Name = x.School.Name
+                },
+                Name = x.Role.Name
+            }).ToList();
+
     }
 }

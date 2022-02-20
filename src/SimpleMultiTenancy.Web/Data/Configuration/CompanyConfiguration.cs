@@ -3,11 +3,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SimpleMultiTenancy.Web.Data
 {
-    public class CompanyConfiguration : IEntityTypeConfiguration<Company>
+    public class CompanyConfiguration : IEntityTypeConfiguration<School>
     {
-        public void Configure(EntityTypeBuilder<Company> builder)
+        public void Configure(EntityTypeBuilder<School> builder)
         {
-            builder.Property(x => x.Id).ValueGeneratedNever();
             builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
         }
     }

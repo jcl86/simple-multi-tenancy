@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
@@ -16,36 +17,23 @@ namespace SimpleMultiTenancy.Web.Data
         {
             var identity = await base.GenerateClaimsAsync(user);
 
-            //user = await ReloadUserInludingNavigationProperty(user);
+            user = await ReloadUserInludingNavigationProperty(user);
 
-            ////Search for for the company ids the user has access
-            //UserManager.role
-            var roles = await UserManager.GetRolesAsync(user);
-
-            foreach (var role in roles)
+            foreach (var roleinCompany in user.GetCompanyRoles())
             {
-                identity.AddClaim(new Claim("role", role));
+                identity.AddClaim(new Claim(CustomClaims.RoleInCompany, roleinCompany.ToString()));
             }
-
-            //if (user.IsAsignedToLegacyLabnetContact())
-            //{
-            //    identity.AddClaim(new Claim(CustomClaims.LegacyContactId, user.IdContactoLabnet().ToString()));
-            //}
-
-            //if (user.IsAsignedToCustomer())
-            //{
-            //    identity.AddClaim(new Claim(CustomClaims.Customer, user.IdCliente().ToString()));
-            //}
 
             return identity;
         }
 
-        //private async Task<User> ReloadUserInludingNavigationProperty(User user)
-        //{
-        //    user = await UserManager.Users
-        //        .Include(x => x.co)
-        //        .SingleAsync(x => x.Id == user.Id);
-        //    return user;
-        //}
+        private async Task<User> ReloadUserInludingNavigationProperty(User user)
+        {
+            user = await UserManager.Users
+                .Include(x => x.UserRoles)
+                .ThenInclude(x => x.Role)
+                .SingleAsync(x => x.Id == user.Id);
+            return user;
+        }
     }
 }
