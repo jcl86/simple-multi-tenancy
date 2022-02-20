@@ -21,7 +21,7 @@ namespace SimpleMultiTenancy.Web.Data
 
             foreach (var roleinCompany in user.GetCompanyRoles())
             {
-                identity.AddClaim(new Claim(CustomClaims.RoleInCompany, roleinCompany.ToString()));
+                identity.AddClaim(new Claim(CustomClaims.RoleInSchool, roleinCompany.ToString()));
             }
 
             return identity;

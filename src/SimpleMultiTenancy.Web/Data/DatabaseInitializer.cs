@@ -29,7 +29,24 @@ namespace SimpleMultiTenancy.Web.Data
             var uned = await GetOrCreateSchool("UNED");
 
             await GetOrCreateUser("bob@boss.com", DefaultPassword, (berkeley.Id, student.Id), (uned.Id, teacher.Id));
-            await GetOrCreateUser("alice@berkeley.com", DefaultPassword, (berkeley.Id, student.Id));
+            var alice = await GetOrCreateUser("alice@berkeley.com", DefaultPassword, (berkeley.Id, student.Id));
+
+            context.Grades.RemoveRange(context.Grades);
+            CreateGrade(berkeley, alice, "Maths", 7);
+            CreateGrade(berkeley, alice, "Computing sciences", 9);
+            await context.SaveChangesAsync();
+        }
+
+        private void CreateGrade(School berkeley, User alice, string subject, int value)
+        {
+            var grade = new Grade()
+            {
+                SchoolId = berkeley.Id,
+                UserId = alice.Id,
+                Subject = subject,
+                Value = value
+            };
+            context.Grades.Add(grade);
         }
 
         private async Task<School> GetOrCreateSchool(string schoolName)
@@ -44,7 +61,7 @@ namespace SimpleMultiTenancy.Web.Data
             return school;
         }
 
-        public async Task GetOrCreateUser(string email, string password, params (int schoolId, string roleId)[] roles)
+        public async Task<User> GetOrCreateUser(string email, string password, params (int schoolId, string roleId)[] roles)
         {
             var user = await userManager.FindByNameAsync(email);
             if (user is null)
@@ -65,6 +82,7 @@ namespace SimpleMultiTenancy.Web.Data
 
                 var result = await userManager.CreateAsync(user, password);
             }
+            return user;
         }
 
         private async Task<Role> GetOrCreateRole(string roleName)

@@ -2,6 +2,6 @@
 {
     public class CustomClaims
     {
-        public const string RoleInCompany = nameof(RoleInCompany);
+        public const string RoleInSchool = nameof(RoleInSchool);
     }
 }

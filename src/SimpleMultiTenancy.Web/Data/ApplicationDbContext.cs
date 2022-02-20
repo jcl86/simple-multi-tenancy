@@ -15,6 +15,7 @@ namespace SimpleMultiTenancy.Web.Data
         IdentityUserToken<string>>
     {
         public DbSet<School> Schools { get; set; }
+        public DbSet<Grade> Grades { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

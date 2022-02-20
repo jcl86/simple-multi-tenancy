@@ -6,5 +6,6 @@
         public string Name { get; set; }
 
         public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<Grade> Grades { get; set; }
     }
 }
