@@ -6,14 +6,15 @@ using SimpleMultiTenancy.Web.Data;
 
 namespace SimpleMultiTenancy.Web.Pages
 {
-    [Authorize()]
+    [Authorize(Policies.IsTeacher)]
     public class GradesModel : PageModel
     {
         //https://docs.microsoft.com/es-es/aspnet/core/security/authorization/policies?view=aspnetcore-6.0
 
         private readonly ApplicationDbContext context;
 
-        public IEnumerable<Grade> Grades { get; set; }
+        [BindProperty]
+        public List<ViewModels.Grade> Grades { get; set; }
 
         public GradesModel(ApplicationDbContext context)
         {
@@ -22,7 +23,13 @@ namespace SimpleMultiTenancy.Web.Pages
 
         public async Task OnGet(int schoolId)
         {
-            Grades = await context.Grades.Where(x => x.SchoolId == schoolId).ToListAsync();
+            Grades = await context.Grades.Where(x => x.SchoolId == schoolId)
+                .Select(x => new ViewModels.Grade()
+                {
+                    Id = x.Id,
+                    Subject = x.Subject,
+                    Value = x.Value
+                }).ToListAsync();
         }
     }
 }

@@ -19,9 +19,9 @@ namespace SimpleMultiTenancy.Web.Data
 
             user = await ReloadUserInludingNavigationProperty(user);
 
-            foreach (var roleinCompany in user.GetCompanyRoles())
+            foreach (var roleInSchool in user.GetCompanyRoles())
             {
-                identity.AddClaim(new Claim(CustomClaims.RoleInSchool, roleinCompany.ToString()));
+                identity.AddClaim(new Claim(CustomClaims.RoleInSchool, roleInSchool.ToString()));
             }
 
             return identity;

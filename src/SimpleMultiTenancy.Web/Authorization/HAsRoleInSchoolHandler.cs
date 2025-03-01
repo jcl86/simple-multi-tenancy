@@ -3,7 +3,7 @@ using SimpleMultiTenancy.Web.Data;
 
 namespace SimpleMultiTenancy.Web
 {
-    public class IsTeacherHandler : AuthorizationHandler<HasRoleInSchoolRequirement>
+    public class HAsRoleInSchoolHandler : AuthorizationHandler<HasRoleInSchoolRequirement>
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, HasRoleInSchoolRequirement requirement)
         {
